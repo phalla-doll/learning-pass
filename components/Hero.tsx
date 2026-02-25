@@ -2,11 +2,13 @@
 
 import { motion } from "motion/react";
 import { Play } from "lucide-react";
+import { HeroBackground } from "./HeroBackground";
 
 export function Hero() {
   return (
     <section className="relative w-full min-h-screen bg-black flex items-center justify-center pt-32 pb-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <HeroBackground />
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
         
         {/* Left: App Mockup */}
         <div className="flex justify-center lg:justify-end order-2 lg:order-1">
