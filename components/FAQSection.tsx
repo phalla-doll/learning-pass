@@ -1,12 +1,33 @@
 "use client";
 
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+
 export function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   const faqs = [
-    "What's the process for obtaining the pass?",
-    "Are there any restrictions on where I can use the pass?",
-    "Can I track my learning progress in the app?",
-    "How can I monitor and manage my enrollments within the app?"
+    {
+      question: "What's the process for obtaining the pass?",
+      answer: "Simply download the app, verify your identity using a government-issued ID, and your virtual pass will be generated instantly. You can start using it right away."
+    },
+    {
+      question: "Are there any restrictions on where I can use the pass?",
+      answer: "The Learning Pass is accepted at all partner institutions, both online and at physical locations. Look for the 'Learning Pass Accepted' badge when enrolling."
+    },
+    {
+      question: "Can I track my learning progress in the app?",
+      answer: "Yes, the app provides a comprehensive dashboard showing your active enrollments, completed courses, and upcoming workshops all in one place."
+    },
+    {
+      question: "How can I monitor and manage my enrollments within the app?",
+      answer: "Navigate to the 'My Passes' section in the app. From there, you can view details of all your current enrollments, cancel upcoming classes, or renew expiring passes."
+    }
   ];
+
+  const toggleFaq = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
     <section className="w-full bg-white py-32 text-black" id="faqs">
@@ -24,14 +45,44 @@ export function FAQSection() {
         </div>
 
         <div className="space-y-0">
-          {faqs.map((faq, i) => (
-            <div key={i} className="flex items-center justify-between py-8 border-b border-gray-200 group cursor-pointer">
-              <h3 className="text-xl font-medium group-hover:text-yellow-500 transition-colors pr-8">{faq}</h3>
-              <div className="w-3 h-3 bg-black group-hover:bg-yellow-500 transition-colors shrink-0" />
-            </div>
-          ))}
+          {faqs.map((faq, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <div key={i} className="border-b border-gray-200">
+                <button
+                  onClick={() => toggleFaq(i)}
+                  className="w-full flex items-center justify-between py-8 group cursor-pointer text-left focus:outline-none"
+                >
+                  <h3 className={`text-xl font-medium transition-colors pr-8 ${isOpen ? 'text-yellow-500' : 'group-hover:text-yellow-500'}`}>
+                    {faq.question}
+                  </h3>
+                  <motion.div 
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className={`w-3 h-3 shrink-0 transition-colors ${isOpen ? 'bg-yellow-500' : 'bg-black group-hover:bg-yellow-500'}`} 
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pb-8 text-gray-600 leading-relaxed max-w-3xl">
+                        {faq.answer}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
+
